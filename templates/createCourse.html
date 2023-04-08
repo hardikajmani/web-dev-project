@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create Course</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+
+			<h2>Create Course</h2>
+			<hr>
+		</div>
+
+		<div class="flex-container">
+			<div id="createAccountForm">
+				<div class="messages">
+					{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						<div class="notification is-danger">
+							{{ messages[0] }}
+						</div>
+					{% endif %}
+					{% endwith %}
+				</div>
+				<form method="POST">
+					{{ form.courseName.label }}
+					{{ form.courseName }}<br>
+
+					{{ form.courseDescription.label }}
+					{{ form.courseDescription }}<br>
+
+					{{ form.courseCapacity.label }}
+					{{ form.courseCapacity }}<br>
+
+					{{ form.courseProfessor.label }}
+					{{ form.courseProfessor }}<br>
+
+					{{ form.hidden_tag() }}
+					{{ form.submit() }}
+
+				</form>
+			</div>
+			<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+			<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+			
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit Profile</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Edit Profile</h2>
+			<hr>
+		</div>
+
+		<div class="flex-container">			
+			<div id="editProfileForm">
+				<div class="messages">
+					{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						<div class="notification is-danger">
+							{{ messages[0] }}
+						</div>
+					{% endif %}
+					{% endwith %}
+				</div>
+
+				<form method="POST">
+
+					<h3>Edit Account Details</h3>
+
+					{{ editUserForm.firstName.label }}
+					{{ editUserForm.firstName }}<br>
+
+					{{ editUserForm.lastName.label }}
+					{{ editUserForm.lastName }}<br>
+
+					{{ editUserForm.email.label }}
+					{{ editUserForm.email }}<br>
+
+					{{ editUserForm.accountID.label }}
+					{{ editUserForm.accountID }}<br>
+
+					<!-- <br><button onclick="editProfile()">Validate Entries</button><br> -->
+
+					<div id="editUserSubmitButton" style="display: block">
+						{{ editUserForm.hidden_tag() }}
+						{{ editUserForm.submit() }}
+					</div>
+
+					<p id="editUserWarningID" style="display:none">Please review fields. Account ID must be an integer.</p>
+
+					
+				</form>
+			</div>
+
+			<div id="changePassword">
+				<form method="POST">
+
+					<h3>Change Password</h3>
+					
+					{{ changePasswordForm.currPassword.label }}
+					{{ changePasswordForm.currPassword }}<br>
+
+					{{ changePasswordForm.newPassword.label }}
+					{{ changePasswordForm.newPassword }}<br>
+
+					<label for="confirmPassword"><b>{{ changePasswordForm.confPassword.label }} </b></label>
+					{{ changePasswordForm.confPassword }}<br><br>
+
+					<!-- <br><button onclick="changePassword()">Change Password</button><br> -->
+					<div style="display: block" id="submit button">
+						{{ changePasswordForm.hidden_tag() }}
+						{{ changePasswordForm.submit() }}
+					</div>
+
+					<p id="changePasswordWarningID" style="display:none">Please review fields. Passwords must be >5 characters and contain a letter and symbol</p>
+
+					
+
+				</form>
+			</div>
+
+			<div id="securityQuestions">
+				<form method="POST">
+					<h3>Change Answers to Security Questions</h3>
+
+					<h3>Security Questions</h3>
+
+					{{ editQuestionsForm.currPasswordQuestions.label }}
+					{{ editQuestionsForm.currPasswordQuestions }}<br><br>
+					
+					<i> {{ securityQuestions[0] }} </i> <br>
+
+					{{ editQuestionsForm.securityAnswer1.label }}
+					{{ editQuestionsForm.securityAnswer1 }}<br><br>
+					
+					<i> {{ securityQuestions[1] }} </i> <br>
+
+					{{ editQuestionsForm.securityAnswer2.label }}
+					{{ editQuestionsForm.securityAnswer2 }}<br><br>
+					
+					<i> {{ securityQuestions[2] }} </i> <br>
+
+					{{ editQuestionsForm.securityAnswer3.label }}
+					{{ editQuestionsForm.securityAnswer3 }}<br><br>
+
+					<div style="display: block" id="submit button">
+						{{ editQuestionsForm.hidden_tag() }}
+						{{ editQuestionsForm.submit() }}
+					</div>
+
+				</form>
+
+			</div>
+			<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+			<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+		</div>
+		
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+			
+			function editProfile() {
+
+				var idInput = document.getElementById("accountID").value;
+
+				if (
+					idValidate(idInput)
+				) {
+					editUserSubmitButton.style.display="block"
+					editUserWarningID.style.display="none"
+				} else {
+					console.log("FALSE")
+					editUserWarningID.style.display="block"
+				}
+			}
+
+			function changePassword() {
+				var passwordInput = document.getElementById("newPassword").value;
+				var passwordConfirm = document.getElementById("confirmPassword").value;
+				
+				// need to add: current password must be entered and be correct
+
+				if (
+					passwordValidate(passwordInput, passwordConfirm)
+				) {
+					changePasswordSubmitButton.style.display="block"
+					changePasswordWarningID.style.display="none"
+				} else {
+					console.log("FALSE")
+					changePasswordWarningID.style.display="block"
+				}
+			}
+
+			function changeSecurity() {
+
+				// need to add: current password must be entered and be correct
+
+				return
+			}
+
+			function idValidate(str) {
+				var notNumList = /^[_!@#$%^&a-zA-Z]+$/;
+
+				for (let i = 0; i < str.length; i++) {
+				    if (str.charAt(i).match(notNumList)) {return false}
+			    }
+				return true
+			}
+
+			function passwordValidate(passwordInput, passwordConfirm) {
+
+				var validated = true;
+				var letter = /^[a-zA-Z]+$/;
+
+				if (
+					passwordInput.length < 5 ||
+					numSymCount(passwordInput) === false ||
+					passwordInput !== passwordConfirm
+					) {validated = false}
+
+				if (validated) {
+					return true
+				} else {
+					return false
+				}
+			}
+
+			function numSymCount(str) {
+				var numberList = /^[0-9]+$/;
+				var symbolList = /^[_!@#$%^&]+$/;
+				var numCount = 0
+				var symCount = 0
+
+				for (let i = 0; i < str.length; i++) {
+				    if (str.charAt(i).match(numberList)) {numCount++}
+				    if (str.charAt(i).match(symbolList)) {symCount++}	
+			    }
+			    if (
+			    	numCount < 1 ||
+			    	symCount < 1 
+		    	) {
+			    	return false 
+				  } else {return true}
+			}
+
+		</script>
+
+	</body>
+</html>

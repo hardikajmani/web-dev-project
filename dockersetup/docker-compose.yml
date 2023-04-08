@@ -1,0 +1,64 @@
+version: "3.9"
+networks:
+    sharedNetwork:
+     driver: bridge
+     ipam:
+       driver: default
+
+services:
+  database:
+    build: 
+      context: ./
+      dockerfile: Dockerfile_MySQL
+    container_name: database
+    image: mysql:8-debian
+    networks:
+      - sharedNetwork
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: db
+      MYSQL_DATABASE: db
+      MYSQL_USER: db
+      MYSQL_PASSWORD: db
+      MYSQL_TCP_PORT: 3320
+  
+  backend:
+    build: 
+      context: ./
+      dockerfile: Dockerfile_Backend
+    working_dir: /web_dev_spring22_project/backend
+    container_name: backend
+    networks:
+      - sharedNetwork
+    ports:
+      - 3310:3310
+    links:
+      - database   
+    command: "flask run" #"tail -f /dev/null"
+    environment:
+      FLASK_APP : restful_backend.py
+      FLASK_RUN_PORT: 3310
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_ENV: development
+      WORKING_DIRECTORY: /web_dev_spring22_project/backend/
+
+
+  frontend:
+    build: 
+      context: ./
+      dockerfile: Dockerfile_Frontend
+    working_dir: /web_dev_spring22_project
+    container_name: frontend
+    networks:
+      - sharedNetwork
+    ports:
+      - 3330:3330
+    command: "flask run" #"tail -f /dev/null"
+    environment:
+      FLASK_APP : app.py
+      FLASK_RUN_PORT: 3330
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_ENV: development
+      WORKING_DIRECTORY: /web_dev_spring22_project/

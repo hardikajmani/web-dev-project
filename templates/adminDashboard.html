@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Dashboard</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Admin Dashboard</h2>
+			<hr>
+		</div>
+	
+		<div class="flex-container">	
+			<div id="userSummary">
+
+				<h3>User Summary</h3>			
+
+					<table id="tblAssignments" border =solid>
+						<thead>
+							<tr>
+								{% for header in headingsUserSummary %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								{% for cell in dataUserSummary %}
+								<td>{{ cell }}</td>
+								{% endfor %}
+							</tr>
+						</tbody>
+					</table>
+			</div>
+
+			<div id="allUsers">
+
+				<h3>All Users</h3>
+					<label for="userFilter">Filter Users</label>
+					<form method='post' action="#" id="selectionForm">
+					<select id="status" name="status" onchange="this.form.submit()">
+						<option value="all">all</option>
+						<option value="inactive">inactive</option>
+						<option value="active">active</option>
+					</select>
+					</form>
+					<table id="tblAssignments" border=solid>
+						<thead>
+							<tr>
+								{% for header in headingsUsers %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							{{ status }}
+							{% for row in dataUsers %}
+									<tr>
+										{% for cell in row %}
+											<td>{{ cell }}</td>
+										{% endfor %}
+										<td>
+											<div id="activateUserForm">
+												<form method="POST">
+													{{ form.hidden_tag() }}
+													{{ form.submit }}
+													<input type="hidden" id="rowUserID" name="rowUserID" value="{{ row[0] }}">
+												</form>
+											</div>
+											<a href="{{ url_for('addToCourse', userid = row[0])}}">Add to Course</a><br>
+										</td>
+									</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+			</div>
+
+			<div id="adminLinks">
+				<br>
+				<a href="{{ url_for('createCourse') }}">Create Course</a><br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+
+			// need to add search and filter functions
+
+		</script>
+
+	</body>
+</html>

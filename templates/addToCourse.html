@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add to Course</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Add to Course</h2>
+			<hr>
+		</div>
+		<div class="flex-container">
+			<div id="courses">	
+
+				<h3>Student info:</h3>
+
+					<p>First Name: {{ firstName }}<p>
+					<p>Last Name: {{ lastName }}<p>
+					<p>Email: {{ email }}<p>
+						
+					<h3>Courses available to add student to:</h3>
+
+					<table id="tblCourses" border =solid>
+						<thead>
+							<tr>
+								{% for header in headings %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							
+
+								{% for row in data %}
+								<tr>
+									{% for cell in row %}
+									<td>{{ cell }}</td>
+									{% endfor %}
+									<td>
+										<div id="addToCourseForm">
+											<form method="POST">
+												{{ form.hidden_tag() }}
+												{{ form.submit }}
+												<input type="hidden" id="rowCourseID" name="rowCourseID" value="{{ row}}">
+											</form>
+										</div>
+										</td>
+								</tr>
+								{% endfor %}
+
+								</td>
+
+							
+						</tbody>
+					</table>
+			</div>
+
+			<div id="courseLinks">
+				<br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+			
+			function addToCourse() {
+				return
+			}
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Student Grades</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+	<body onload="loadUserID()">
+	
+		<div class="header">
+			<h2>Student Grades (we may need a separate teacher version)</h2>
+			<hr>
+		</div>
+	
+		<div class="flex-container">		
+			<div id="grades">			
+				<table id="tblGrades" border =solid>
+					<thead>
+						<tr>
+							{% for header in headings %}
+							<th>{{ header }}</th>
+							{% endfor %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for row in data %}
+						<tr>
+							{% for cell in row %}
+							<td>{{ cell }}</td>
+							{% endfor %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>	
+
+			<div id="gradeLinks">
+				<br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+			
+		</script>
+
+	</body>
+</html>

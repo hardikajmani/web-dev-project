@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grade Assignments</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Grade Assignment</h2>
+			<hr>
+		</div>
+
+		<div class="flex-container">
+			<div id="gradeAssignments">		
+
+				<h3>Assignment Name: {{ name }} </h3>	
+
+					<table id="tblGradeAssignments" border =solid>
+						<thead>
+							<tr>
+								{% for header in headings %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in data %}
+							<tr>
+								{% for cell in row %}
+								<td>{{ cell }}</td>
+								{% endfor %}
+								<td>			
+									<div id="submitGradeForm">
+										<form method="POST">
+											{{ form.assignmentGradeSubmission.label }}<br>
+											{{ form.assignmentGradeSubmission }}<br>
+											{{ form.hidden_tag() }}
+											{{ form.submit }}
+										</form>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+			</div>
+
+			<div id="assignmentLinks">
+				<br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+
+			function submitGrade() {
+
+				// might want to consider making submit grade its own page rather than nesting in each table
+
+				return
+			}
+
+
+		</script>
+
+	</body>
+</html>

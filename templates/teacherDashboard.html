@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Teacher Dashboard</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Teacher Dashboard</h2>
+			<hr>
+		</div>
+
+		<div class="flex-container">
+			<div id="assignments">			
+
+				<p>Assignments to Grade</p>
+
+					<table id="tblToGrade" border =solid>
+						<thead>
+							<tr>
+								{% for header in headings %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in dataToGrade %}
+							<tr>
+								{% for cell in row %}
+								<td>{{ cell }}</td>
+								{% endfor %}
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+			</div>
+
+			<div id="accountLinks">
+				<br>
+				<a href="{{ url_for('editProfile') }}">Edit Profile</a><br>
+				<a href="{{ url_for('courses') }}">Courses</a><br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+
+		</script>
+
+	</body>
+</html>

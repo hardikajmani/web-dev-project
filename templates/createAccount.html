@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create Account</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Create Account</h2>
+			<hr>
+		</div>
+
+		<div class="flex-container">
+			<div id="createAccountForm">
+				<form method="POST">
+					<h3>User Information</h3>
+					{{ form.firstName.label }}
+					{{ form.firstName }}<br>
+
+					{{ form.lastName.label }}
+					{{ form.lastName }}<br>
+
+					{{ form.email.label }}
+					{{ form.email }}<br>
+
+					{{ form.accountID.label }}
+					{{ form.accountID }}<br>
+
+					{{ form.password.label }}
+					{{ form.password }}<br>
+
+					<label for="confirmPassword"><b>Confirm Password:</b></label>
+					<input type="text" id="confirmPassword" name="confirmPassword"><br><br>
+
+					{{ form.accountType.label }}
+					{{ form.accountType }}<br>
+
+					<h3>Security Questions</h3>
+					<p>{{ securityQuestions[0] }}</p>
+					{{ form.securityAnswer1.label }}
+					{{ form.securityAnswer1 }}<br>
+
+					<p>{{ securityQuestions[1] }}</p>
+					{{ form.securityAnswer2.label }}
+					{{ form.securityAnswer2 }}<br>
+
+					<p>{{ securityQuestions[2] }}</p>
+					{{ form.securityAnswer3.label }}
+					{{ form.securityAnswer3 }}<br>
+
+					<br><button type="button" onclick="createAccount()">Validate Entries</button><br><br>
+					 
+					<p id="warning" style="display:none">Please review fields. Email must be an email, account ID must be an integer, passwords must be >5 characters and contain a letter and symbol.</p>
+
+					 <div id="submitButton" style="display:none">
+                         {{ form.hidden_tag() }}
+					 	 {{ form.submit() }}
+					</div>
+
+				</form>
+			</div>
+
+				
+			<div id="newAccountLink">
+
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+			
+			function createAccount() {
+				var passwordInput = document.getElementById("password").value;
+				var passwordConfirm = document.getElementById("confirmPassword").value;
+
+				var emailInput = document.getElementById("email").value;
+				var idInput = document.getElementById("accountID").value;
+
+				var submitButton = document.getElementById("submitButton");
+
+				if (passwordValidate(passwordInput, passwordConfirm) &&
+					emailValidate(emailInput) &&
+					idValidate(idInput)
+				) {
+					submitButton.style.display="block"
+					warning.style.display="none"
+
+				} else {
+					console.log("FALSE")
+					warning.style.display="block"
+				}
+			}
+				
+
+			function passwordValidate(passwordInput, passwordConfirm) {
+
+
+				var validated = true;
+				var letter = /^[a-zA-Z]+$/;
+
+				if (
+					passwordInput.length < 5 ||
+					numSymCount(passwordInput) === false ||
+					passwordInput !== passwordConfirm
+					) {validated = false}
+
+				if (validated) {
+					return true
+				} else {
+					return false
+				}
+			}
+
+			function numSymCount(str) {
+				var numberList = /^[0-9]+$/;
+				var symbolList = /^[_!@#$%^&]+$/;
+				var numCount = 0
+				var symCount = 0
+
+				for (let i = 0; i < str.length; i++) {
+				    if (str.charAt(i).match(numberList)) {numCount++}
+				    if (str.charAt(i).match(symbolList)) {symCount++}	
+			    }
+			    if (
+			    	numCount < 1 ||
+			    	symCount < 1 
+		    	) {
+			    	return false 
+				  } else {return true}
+			}
+
+			function emailValidate(str) {
+				var ampCount = 0
+				var dotCount = 0
+
+				for (let i = 0; i < str.length; i++) {
+				    if (str.charAt(i) === '@') {ampCount++}
+				    if (str.charAt(i) === '.') {dotCount++}
+			    }
+			    if (
+			    	dotCount !== 1 ||
+			    	ampCount !== 1 
+		    	) {
+			    	return false 
+				  } else {return true}
+			}
+
+			function idValidate(str) {
+				var notNumList = /^[_!@#$%^&a-zA-Z]+$/;
+
+				for (let i = 0; i < str.length; i++) {
+				    if (str.charAt(i).match(notNumList)) {return false}
+			    }
+				return true
+			}
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Announcements</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h2>Announcements</h2>
+			<hr>
+		</div>
+			
+		<div class="flex-container">
+			<div id="announcements">	
+				
+				<h3>Course: {{ coursename }}</h3>
+
+					<table id="tblAnnouncements" border =solid>
+						<thead>
+							<tr>
+								{% for header in headings %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							{% for announcement in announcements %}
+							<tr>
+								<td>{{ announcement.announcementid }}</td>
+								<td>{{ announcement.message }}</td>
+								<td>{{ announcement.date }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+			</div>
+
+			<div id="annoucementLinks">
+				<br>
+				<a href="{{ url_for('createAnnounce', courseid=courseid) }}">Create New Announcement (only visible for Teachers)</a><br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a>
+				<br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+
+			// need a function to run on load so "create announcement" link is only visible for teachers
+
+		</script>
+
+	</body>
+</html>

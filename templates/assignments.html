@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Assignments</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+</head>
+	
+	<body onload="loadUserID()">
+
+		<div class="header">
+			<h2>Assignments</h2>
+			<hr>
+		</div>
+			
+		<div class="flex-container">
+			<div>			
+
+					<table id="tblAssignments" border =solid>
+						<thead>
+							<tr>
+								{% for header in headings %}
+								<th>{{ header }}</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in data %}
+							<tr>
+								{% for cell in row %}
+								<td>{{ cell }}</td>
+								{% endfor %}
+								<td>			
+									<a href="{{ url_for('submitAssign', courseid=courseid) }}">Submit Assignment (only visible for Students)</a><br>
+									<a href="{{ url_for('gradeAssign', courseid=courseid) }}">Grade Assignment (only visible for Teachers)</a><br>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+			</div>
+
+			<div>
+				<br>
+				<a href="{{ url_for('createAssign', courseid=courseid) }}">Create New Assignment (only visible for Teachers)</a><br>
+				<a href="{{ url_for('tempDash') }}"> Dashboard </a><br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+
+			// need a function to run on load so "submit assignment" link is only visible for students
+			// need a function to run on load so "create new assignment" link is only visible for teachers
+
+
+		</script>
+
+	</body>
+</html>

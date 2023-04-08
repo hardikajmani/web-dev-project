@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Temp Dashboard Nav</title>
+
+	<link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='canvasStyle.css')}}" />
+
+</head>
+	
+	<body onload="loadUserID()">
+		<div class="header">
+			<h1>Temp Dashboard Navigation</h1>
+			<hr>
+		</div>
+			
+		<div class="flex-container">
+			<div id="dashboardLinks">
+				<a href="{{ url_for('myAccount', userid = userid) }}">My Account</a><br>
+				<a href="{{ url_for('studentDash', userid = userid) }}">Student Dashboard</a><br>
+				<a href="{{ url_for('teacherDash', userid = userid) }}">Teacher Dashboard</a><br>
+				<a href="{{ url_for('adminDash', userid = userid) }}">Admin Dashboard</a><br>
+			</div>
+			<div>
+				<br>
+				<a href="{{ url_for('auth.logout') }}">Log Out</a><br>
+			</div>
+		</div>
+
+		<script>
+
+			function loadUserID() {
+				var userID = sessionStorage.getItem("userID")
+				console.log(userID)
+			}
+
+		</script>
+
+	</body>
+</html>
